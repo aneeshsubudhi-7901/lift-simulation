@@ -1,0 +1,107 @@
+html {
+  font-size: 130%;
+  font-family: "Montserrat", sans-serif;
+}
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 70%;
+  margin: 0 auto;
+  justify-content: center;
+}
+
+.heading {
+  padding: 10px;
+}
+
+.config-container {
+  border: 1px solid;
+  border-radius: 15px;
+  border-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  padding: 20px;
+}
+
+.config-fields {
+  display: grid;
+  grid-template-columns: 300px 100px;
+  grid-template-rows: 30px 30px;
+  column-gap: 10px;
+  row-gap: 30px;
+  padding: 50px;
+}
+
+.config-fields > input {
+  border-radius: 5px;
+  border: 1px solid;
+}
+
+.simulate-btn {
+  background-color: #ffc436;
+  border-radius: 10px;
+  padding: 10px;
+  border: 1px solid white;
+  cursor: pointer;
+  width: 30%;
+  padding: 15px;
+  font-size: 70%;
+}
+
+.invalid-floors,
+.invalid-lifts {
+  color: red;
+  /* padding: 2px 0px; */
+  font-size: 80%;
+}
+
+.hide-invalid-message {
+  display: none;
+}
+
+/* simulation related css */
+.simulation-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+}
+
+.floor-component {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 5px;
+}
+
+.floor {
+  background-color: black;
+  height: 5px;
+}
+
+.lift-button {
+  border: 1px solid white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.up {
+  background-color: green;
+}
+
+.down {
+  background-color: #ffc436;
+}
+
+.lift-button-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}

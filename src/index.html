@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300&family=Montserrat&family=Poppins&display=swap"
+      rel="stylesheet"
+    />
+    <title>Lift Simulation</title>
+  </head>
+  <body>
+    <div class="main-container">
+      <h1 class="heading">LIFT SIMULATION</h1>
+      <div class="config-container">
+        <div class="config-fields">
+          <label for="floors">Enter number of floors : </label>
+          <input type="number" id="floors" />
+          <label for="lifts">Enter number of lifts : </label>
+          <input type="number" id="lifts" />
+        </div>
+        <p class="invalid-floors hide-invalid-message">
+          Number of floors should be greater than 1
+        </p>
+        <p class="invalid-lifts hide-invalid-message">
+          Number of lifts should be greater than 1
+        </p>
+        <button class="simulate-btn">Simulate</button>
+      </div>
+      <div class="simulation-container"></div>
+    </div>
+  </body>
+  <script src="js/main.js"></script>
+</html>
