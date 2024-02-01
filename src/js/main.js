@@ -1,5 +1,7 @@
 "use strict";
 
+import { Controller } from "./controller.js";
+
 let simulateBtnEl = document.querySelector(".simulate-btn");
 let floorsInputEl = document.querySelector("#floors");
 let liftsInputEl = document.querySelector("#lifts");
@@ -49,11 +51,86 @@ const toggleConfigView = function () {
     let lifts = liftsInputEl.value;
 
     simulationViewInit(floors, lifts);
+    controllerInit(floors, lifts);
   }
   isConfigView = !isConfigView;
 };
 
 const simulationViewInit = function (floors, lifts) {
   //basically, i need to create a html template of a floor component here; which will contain other small components here like up button, down button, floor(literal floor), floor heading. we are ignoring lift for a while now (it will require me to now about css animations and other features of DOM)
+  renderFloors(floors);
+  renderLifts(lifts);
+};
+
+const controllerInit = function (floors, lifts) {};
+
+const renderFloors = function (floors) {
   let simulationContainerEl = document.querySelector(".simulation-container");
+  for (let i = floors; i >= 1; i--) {
+    let floorComponentDiv = document.createElement("div");
+    floorComponentDiv.classList.add("floor-component");
+
+    let floorHeadingEl = document.createElement("h3");
+    floorHeadingEl.innerText = `LEVEL ${i}`;
+
+    let liftButtonGrpEl = document.createElement("div");
+    liftButtonGrpEl.classList.add("lift-button-group");
+    if (i >= 1) {
+      let upButton = document.createElement("button");
+      upButton.classList.add("lift-button", "up");
+      upButton.id = `${i}-up`;
+      upButton.innerHTML = "&#8593;";
+
+      //adding click event listener
+      upButton.addEventListener("click", Controller.up);
+
+      liftButtonGrpEl.appendChild(upButton);
+    }
+    if (i <= floors) {
+      let downButton = document.createElement("button");
+      downButton.classList.add("lift-button", "down");
+      downButton.id = `${i}-down`;
+      downButton.innerHTML = "&#8595;";
+
+      //adding click event listener
+      downButton.addEventListener("click", Controller.down);
+
+      liftButtonGrpEl.appendChild(downButton);
+    }
+
+    let floorEl = document.createElement("div");
+    floorEl.classList.add("floor");
+
+    //appending all internal components in floorComponentdiv
+    floorComponentDiv.appendChild(floorHeadingEl);
+    floorComponentDiv.appendChild(liftButtonGrpEl);
+    floorComponentDiv.appendChild(floorEl);
+    simulationContainerEl.appendChild(floorComponentDiv);
+  }
+};
+
+const renderLifts = function (lifts) {
+  let simulationContainerEl = document.querySelector(".simulation-container");
+  let simContainerChildrenList = simulationContainerEl.childNodes;
+  let simContainerChildrenListLen = simContainerChildrenList.length;
+  let firstFloorEl = simContainerChildrenList[simContainerChildrenListLen - 1];
+  let leftOffset = 100;
+  let liftSpacing = 100;
+  let distanceFromLeft = 0;
+  let bottomOffset = 15;
+  let liftWidth = 30;
+  for (let i = 0; i < lifts; i++) {
+    let liftEl = document.createElement("div");
+    liftEl.classList.add("lift");
+    liftEl.style.left = `${leftOffset + distanceFromLeft + liftSpacing}px`;
+    distanceFromLeft = distanceFromLeft + liftWidth + liftSpacing;
+    liftEl.style.bottom = `${bottomOffset}px`;
+    let liftDoorLeft = document.createElement("div");
+    liftDoorLeft.classList.add("lift-door", "left");
+    let liftDoorRight = document.createElement("div");
+    liftDoorRight.classList.add("lift-door", "right");
+    liftEl.appendChild(liftDoorLeft);
+    liftEl.appendChild(liftDoorRight);
+    firstFloorEl.appendChild(liftEl);
+  }
 };
