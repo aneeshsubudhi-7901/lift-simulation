@@ -1,6 +1,8 @@
 "use strict";
 
 import { Controller } from "./controller.js";
+import { DataStore } from "./datastore.js";
+// import {DataStore} fr
 
 let simulateBtnEl = document.querySelector(".simulate-btn");
 let floorsInputEl = document.querySelector("#floors");
@@ -8,6 +10,10 @@ let liftsInputEl = document.querySelector("#lifts");
 let invalidFloorsEl = document.querySelector(".invalid-floors");
 let invalidLiftsEl = document.querySelector(".invalid-lifts");
 let isConfigView = true;
+
+//controller
+let controller = null;
+let datastore = null;
 
 simulateBtnEl.addEventListener("click", function () {
   let floorsValue = floorsInputEl.value;
@@ -60,9 +66,23 @@ const simulationViewInit = function (floors, lifts) {
   //basically, i need to create a html template of a floor component here; which will contain other small components here like up button, down button, floor(literal floor), floor heading. we are ignoring lift for a while now (it will require me to now about css animations and other features of DOM)
   renderFloors(floors);
   renderLifts(lifts);
+  datastoreInit(floors, lifts);
+  controllerInit();
 };
 
-const controllerInit = function (floors, lifts) {};
+const controllerInit = function () {
+  if (controller) {
+    controller = null;
+  }
+  controller = new Controller(datastore);
+};
+
+const datastoreInit = function (floors, lifts) {
+  if (datastore) {
+    datastore = null;
+  }
+  datastore = new DataStore(floors, lifts);
+};
 
 const renderFloors = function (floors) {
   let simulationContainerEl = document.querySelector(".simulation-container");
@@ -82,7 +102,11 @@ const renderFloors = function (floors) {
       upButton.innerHTML = "&#8593;";
 
       //adding click event listener
-      upButton.addEventListener("click", Controller.up);
+      upButton.addEventListener("click", function (e) {
+        console.log(datastore.getState().get(1).transition);
+        controller.move(e);
+        console.log(datastore.getState().get(1).transition);
+      });
 
       liftButtonGrpEl.appendChild(upButton);
     }
@@ -93,7 +117,9 @@ const renderFloors = function (floors) {
       downButton.innerHTML = "&#8595;";
 
       //adding click event listener
-      downButton.addEventListener("click", Controller.down);
+      downButton.addEventListener("click", function (e) {
+        controller.move(e);
+      });
 
       liftButtonGrpEl.appendChild(downButton);
     }
@@ -122,9 +148,12 @@ const renderLifts = function (lifts) {
   for (let i = 0; i < lifts; i++) {
     let liftEl = document.createElement("div");
     liftEl.classList.add("lift");
+    liftEl.id = `lift_${i + 1}`;
+    // liftEl.classList.add("move-lift-up");
     liftEl.style.left = `${leftOffset + distanceFromLeft + liftSpacing}px`;
     distanceFromLeft = distanceFromLeft + liftWidth + liftSpacing;
     liftEl.style.bottom = `${bottomOffset}px`;
+    liftEl.style.transform = `translateY(0px)`;
     let liftDoorLeft = document.createElement("div");
     liftDoorLeft.classList.add("lift-door", "left");
     let liftDoorRight = document.createElement("div");

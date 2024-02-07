@@ -132,10 +132,82 @@ html {
   border: 1px solid black;
   display: flex;
   position: absolute;
+  background-color: silver;
 }
 
 .lift-door {
   flex-grow: 1;
   background-color: skyblue;
   border: 1px solid black;
+}
+
+.move-lift-up {
+  /* animation-name: up;
+  animation-fill-mode: forwards;
+  animation-duration: 2s;
+  animation-iteration-count: infinite; */
+  transition-duration: 5s;
+  transition-property: transform;
+  transform: translateY(-223px);
+}
+
+.move-lift-down {
+  animation-name: down;
+  animation-fill-mode: forwards;
+}
+
+@keyframes up {
+  from {
+    transform: translateY(0%);
+  }
+  to {
+    transform: translateY(-225px);
+  }
+}
+
+@keyframes down {
+  from {
+    transform: translateY(0%);
+  }
+  to {
+    transform: translateY(100%);
+  }
+}
+
+.liftdoor-left {
+  animation-duration: 5s;
+  animation-name: close-left;
+  transform-origin: left;
+  animation-iteration-count: infinite;
+}
+
+.liftdoor-right {
+  animation-duration: 5s;
+  animation-name: close-right;
+  transform-origin: right;
+  animation-iteration-count: infinite;
+}
+
+@keyframes close-left {
+  0% {
+    transform: scaleX(1);
+  }
+  50% {
+    transform: scaleX(0);
+  }
+  100% {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes close-right {
+  0% {
+    transform: scaleX(1);
+  }
+  50% {
+    transform: scaleX(0);
+  }
+  100% {
+    transform: scaleX(1);
+  }
 }
