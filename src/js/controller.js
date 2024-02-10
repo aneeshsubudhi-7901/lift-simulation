@@ -39,13 +39,14 @@ export class Controller {
     let chosenLiftEl = document.getElementById(`lift_${chosenLift}`);
     chosenLiftEl.style.transitionDuration = `${leastDistance * 2}s`;
     chosenLiftEl.style.transitionProperty = "transform";
-    let distanceToMove = leastDistance * 223.25;
+    let distanceToMove = leastDistance * 223.5;
     // let distanceToMove = 0;
     distanceToMove =
       currentFloor > chosenLiftAtFloor ? -1 * distanceToMove : distanceToMove;
-    chosenLiftEl.style.transform = `translateY(${
-      distanceToMove + (chosenLiftAtFloor - 1) * -223.5
-    }px)`;
+    // chosenLiftEl.style.transform = `translateY(${
+    //   distanceToMove + (chosenLiftAtFloor - 1) * -223.5
+    // }px)`;
+    chosenLiftEl.style.transform = `translateY(${distanceToMove}px)`;
     console.log(this);
     this.currentFloor = currentFloor;
     setTimeout(
@@ -55,6 +56,10 @@ export class Controller {
         this.datastore.setState(chosenLift, { transition: false, open: true });
         leftDoorEl.classList.add("liftdoor-left");
         rightDoorEl.classList.add("liftdoor-right");
+        chosenLiftEl.style.bottom = `${15 + (this.currentFloor - 1) * 223.5}px`;
+        chosenLiftEl.style.transitionDuration = "";
+        chosenLiftEl.style.transitionProperty = "";
+        chosenLiftEl.style.transform = "";
         setTimeout(
           function () {
             this.datastore.setState(chosenLift, {
