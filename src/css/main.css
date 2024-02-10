@@ -26,6 +26,25 @@ html {
   padding: 10px;
 }
 
+.heading-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+}
+
+.general-btn {
+  background-color: #ffc436;
+  border-radius: 10px;
+  padding: 10px;
+  border: 1px solid white;
+  cursor: pointer;
+  width: 100px;
+  height: 20%;
+  font-size: 70%;
+}
+
 .config-container {
   border: 1px solid;
   border-radius: 15px;
@@ -74,11 +93,15 @@ html {
 }
 
 /* CSS RELATED TO SIMULATION - FLOORS */
+
+.hide-settings {
+  display: none;
+}
 .simulation-container {
   /* display: flex;
   flex-direction: column;
   align-items: center; */
-  width: 90%;
+  width: 100%;
   margin: 0;
 }
 

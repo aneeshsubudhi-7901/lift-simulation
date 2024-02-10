@@ -11,9 +11,16 @@ let invalidFloorsEl = document.querySelector(".invalid-floors");
 let invalidLiftsEl = document.querySelector(".invalid-lifts");
 let isConfigView = true;
 
+let configureBtnEl = document.querySelector("#configure");
+let resetBtnEl = document.querySelector("#reset");
+
 //controller
 let controller = null;
 let datastore = null;
+
+//global values for lifts and floors
+// let floorsValue = 0;
+// let liftsValue = 0;
 
 simulateBtnEl.addEventListener("click", function () {
   let floorsValue = floorsInputEl.value;
@@ -22,7 +29,7 @@ simulateBtnEl.addEventListener("click", function () {
   if (Number(floorsValue) < 1 || Number(liftsValue) < 1) {
     return;
   }
-  toggleConfigView();
+  toggleView();
 });
 
 floorsInputEl.addEventListener("input", function (e) {
@@ -47,7 +54,18 @@ liftsInputEl.addEventListener("input", function (e) {
   }
 });
 
-const toggleConfigView = function () {
+configureBtnEl.addEventListener("click", function (e) {
+  toggleView();
+});
+
+resetBtnEl.addEventListener("click", function (e) {
+  simulationViewClear();
+  let floorsValue = floorsInputEl.value;
+  let liftsValue = liftsInputEl.value;
+  simulationViewInit(floorsValue, liftsValue);
+});
+
+const toggleView = function () {
   if (isConfigView) {
     let configuratorEl = document.querySelector(".config-container");
     configuratorEl.style.display = "none";
@@ -57,17 +75,51 @@ const toggleConfigView = function () {
     let lifts = liftsInputEl.value;
 
     simulationViewInit(floors, lifts);
-    controllerInit(floors, lifts);
+    // controllerInit(floors, lifts);
+  } else {
+    // let simulatorEl = document.querySelector(".simulation-container");
+    // // simulatorEl.style.display = "none";
+    // let child = simulatorEl.lastElementChild;
+    // while (child) {
+    //   simulatorEl.removeChild(child);
+    //   child = simulatorEl.lastElementChild;
+    // }
+
+    simulationViewClear();
+
+    let configureBtnEl = document.querySelector("#configure");
+    configureBtnEl.classList.add("hide-settings");
+    let resetBtnEl = document.querySelector("#reset");
+    resetBtnEl.classList.add("hide-settings");
+
+    let configuratorEl = document.querySelector(".config-container");
+    configuratorEl.style.display = "";
   }
   isConfigView = !isConfigView;
 };
 
 const simulationViewInit = function (floors, lifts) {
   //basically, i need to create a html template of a floor component here; which will contain other small components here like up button, down button, floor(literal floor), floor heading. we are ignoring lift for a while now (it will require me to now about css animations and other features of DOM)
+
+  let configureBtnEl = document.querySelector("#configure");
+  configureBtnEl.classList.remove("hide-settings");
+  let resetBtnEl = document.querySelector("#reset");
+  resetBtnEl.classList.remove("hide-settings");
+
   renderFloors(floors);
   renderLifts(lifts);
   datastoreInit(floors, lifts);
   controllerInit();
+};
+
+const simulationViewClear = function () {
+  let simulatorEl = document.querySelector(".simulation-container");
+  // simulatorEl.style.display = "none";
+  let child = simulatorEl.lastElementChild;
+  while (child) {
+    simulatorEl.removeChild(child);
+    child = simulatorEl.lastElementChild;
+  }
 };
 
 const controllerInit = function () {
