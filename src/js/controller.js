@@ -2,6 +2,66 @@ export class Controller {
   constructor(datastore) {
     this.datastore = datastore;
   }
+  findBestLift(e) {
+    let currentFloor = Number(e.target.id.split("-")[0]);
+    let currentLiftsState = this.datastore.getState();
+    let chosenLift = 0;
+    let leastDistance = 10000;
+    let chosenLiftAtFloor = 0;
+    for (let [key, liftState] of currentLiftsState) {
+      if (!liftState.transition && !liftState.open) {
+        let currentDistance = Math.abs(currentFloor - liftState.floor);
+        if (leastDistance > currentDistance) {
+          leastDistance = currentDistance;
+          chosenLift = key;
+          chosenLiftAtFloor = liftState.floor;
+        }
+      }
+    }
+
+    if (chosenLift === 0) {
+      return null;
+    }
+    return [{ leastDistance, chosenLift, chosenLiftAtFloor }, currentFloor];
+  }
+
+  moveLift({ leastDistance, chosenLift, chosenLiftAtFloor }, currentFloor) {
+    this.datastore.setState(chosenLift, { transition: true });
+    let chosenLiftEl = document.getElementById(`lift_${chosenLift}`);
+    chosenLiftEl.style.transitionDuration = `${leastDistance * 2}s`;
+    chosenLiftEl.style.transitionProperty = "transform";
+    let distanceToMove = leastDistance * 223.5;
+    distanceToMove =
+      currentFloor > chosenLiftAtFloor ? -1 * distanceToMove : distanceToMove;
+    chosenLiftEl.style.transform = `translateY(${distanceToMove}px)`;
+    // this.currentFloor = currentFloor;
+    setTimeout(
+      function () {
+        let leftDoorEl = chosenLiftEl.children[0];
+        let rightDoorEl = chosenLiftEl.children[1];
+        this.datastore.setState(chosenLift, { transition: false, open: true });
+        leftDoorEl.classList.add("liftdoor-left");
+        rightDoorEl.classList.add("liftdoor-right");
+        console.log(currentFloor);
+        chosenLiftEl.style.bottom = `${15 + (currentFloor - 1) * 223.5}px`;
+        chosenLiftEl.style.transitionDuration = "";
+        chosenLiftEl.style.transitionProperty = "";
+        chosenLiftEl.style.transform = "";
+        setTimeout(
+          function () {
+            this.datastore.setState(chosenLift, {
+              open: false,
+              floor: currentFloor,
+            });
+            leftDoorEl.classList.remove("liftdoor-left");
+            rightDoorEl.classList.remove("liftdoor-right");
+          }.bind(this),
+          5000
+        );
+      }.bind(this),
+      leastDistance * 2000
+    );
+  }
   move(e) {
     let currentFloor = Number(e.target.id.split("-")[0]);
     // this.datastore.setState(1, { transition: true });

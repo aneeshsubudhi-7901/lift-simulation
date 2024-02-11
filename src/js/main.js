@@ -136,6 +136,16 @@ const datastoreInit = function (floors, lifts) {
   datastore = new DataStore(floors, lifts);
 };
 
+const controllerAction = function (e) {
+  let result = controller.findBestLift(e);
+  if (result) {
+    let [chosenLiftData, currentFloor] = result;
+    controller.moveLift(chosenLiftData, currentFloor);
+  } else {
+    console.log("DIDN'T FIND LIFT. TRY AGAIN LATER");
+  }
+};
+
 const renderFloors = function (floors) {
   let simulationContainerEl = document.querySelector(".simulation-container");
   for (let i = floors; i >= 1; i--) {
@@ -154,11 +164,12 @@ const renderFloors = function (floors) {
       upButton.innerHTML = "&#8593;";
 
       //adding click event listener
-      upButton.addEventListener("click", function (e) {
-        console.log(datastore.getState().get(1).transition);
-        controller.move(e);
-        console.log(datastore.getState().get(1).transition);
-      });
+      // upButton.addEventListener("click", function (e) {
+      //   console.log(datastore.getState().get(1).transition);
+      //   controller.move(e);
+      //   console.log(datastore.getState().get(1).transition);
+      // });
+      upButton.addEventListener("click", controllerAction);
 
       liftButtonGrpEl.appendChild(upButton);
     }
@@ -169,9 +180,10 @@ const renderFloors = function (floors) {
       downButton.innerHTML = "&#8595;";
 
       //adding click event listener
-      downButton.addEventListener("click", function (e) {
-        controller.move(e);
-      });
+      // downButton.addEventListener("click", function (e) {
+      //   controller.move(e);
+      // });
+      downButton.addEventListener("click", controllerAction);
 
       liftButtonGrpEl.appendChild(downButton);
     }
