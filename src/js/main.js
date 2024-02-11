@@ -2,7 +2,7 @@
 
 import { Controller } from "./controller.js";
 import { DataStore } from "./datastore.js";
-// import {DataStore} fr
+import { Queue } from "./queue.js";
 
 let simulateBtnEl = document.querySelector(".simulate-btn");
 let floorsInputEl = document.querySelector("#floors");
@@ -14,9 +14,9 @@ let isConfigView = true;
 let configureBtnEl = document.querySelector("#configure");
 let resetBtnEl = document.querySelector("#reset");
 
-//controller
 let controller = null;
 let datastore = null;
+let queue = null;
 
 //global values for lifts and floors
 // let floorsValue = 0;
@@ -109,6 +109,7 @@ const simulationViewInit = function (floors, lifts) {
   renderFloors(floors);
   renderLifts(lifts);
   datastoreInit(floors, lifts);
+  queueInit();
   controllerInit();
 };
 
@@ -126,7 +127,7 @@ const controllerInit = function () {
   if (controller) {
     controller = null;
   }
-  controller = new Controller(datastore);
+  controller = new Controller(datastore, queue);
 };
 
 const datastoreInit = function (floors, lifts) {
@@ -136,13 +137,21 @@ const datastoreInit = function (floors, lifts) {
   datastore = new DataStore(floors, lifts);
 };
 
+const queueInit = function () {
+  if (queue) {
+    queue = null;
+  }
+  queue = new Queue();
+};
+
 const controllerAction = function (e) {
   let result = controller.findBestLift(e);
-  if (result) {
-    let [chosenLiftData, currentFloor] = result;
+  let [chosenLiftData, currentFloor] = result;
+  if (chosenLiftData) {
     controller.moveLift(chosenLiftData, currentFloor);
   } else {
     console.log("DIDN'T FIND LIFT. TRY AGAIN LATER");
+    queue.push(currentFloor);
   }
 };
 
