@@ -166,36 +166,28 @@ const renderFloors = function (floors) {
 
     let liftButtonGrpEl = document.createElement("div");
     liftButtonGrpEl.classList.add("lift-button-group");
-    if (i >= 1) {
-      let upButton = document.createElement("button");
-      upButton.classList.add("lift-button", "up");
-      upButton.id = `${i}-up`;
-      upButton.innerHTML = "&#8593;";
 
-      //adding click event listener
-      // upButton.addEventListener("click", function (e) {
-      //   console.log(datastore.getState().get(1).transition);
-      //   controller.move(e);
-      //   console.log(datastore.getState().get(1).transition);
-      // });
-      upButton.addEventListener("click", controllerAction);
-
-      liftButtonGrpEl.appendChild(upButton);
+    //up button
+    let upButton = document.createElement("button");
+    upButton.classList.add("lift-button", "up");
+    if (i == floors) {
+      upButton.classList.add("disable-btn");
     }
-    if (i <= floors) {
-      let downButton = document.createElement("button");
-      downButton.classList.add("lift-button", "down");
-      downButton.id = `${i}-down`;
-      downButton.innerHTML = "&#8595;";
+    upButton.id = `${i}-up`;
+    upButton.innerHTML = "&#8593;";
+    upButton.addEventListener("click", controllerAction);
+    liftButtonGrpEl.appendChild(upButton);
 
-      //adding click event listener
-      // downButton.addEventListener("click", function (e) {
-      //   controller.move(e);
-      // });
-      downButton.addEventListener("click", controllerAction);
-
-      liftButtonGrpEl.appendChild(downButton);
+    //down button
+    let downButton = document.createElement("button");
+    downButton.classList.add("lift-button", "down");
+    if (i == 1) {
+      downButton.classList.add("disable-btn");
     }
+    downButton.id = `${i}-down`;
+    downButton.innerHTML = "&#8595;";
+    downButton.addEventListener("click", controllerAction);
+    liftButtonGrpEl.appendChild(downButton);
 
     let floorEl = document.createElement("div");
     floorEl.classList.add("floor");
@@ -213,7 +205,7 @@ const renderLifts = function (lifts) {
   let simContainerChildrenList = simulationContainerEl.childNodes;
   let simContainerChildrenListLen = simContainerChildrenList.length;
   let firstFloorEl = simContainerChildrenList[simContainerChildrenListLen - 1];
-  let leftOffset = 100;
+  let leftOffset = 50;
   let liftSpacing = 100;
   let distanceFromLeft = 0;
   let bottomOffset = 15;
@@ -222,7 +214,6 @@ const renderLifts = function (lifts) {
     let liftEl = document.createElement("div");
     liftEl.classList.add("lift");
     liftEl.id = `lift_${i + 1}`;
-    // liftEl.classList.add("move-lift-up");
     liftEl.style.left = `${leftOffset + distanceFromLeft + liftSpacing}px`;
     distanceFromLeft = distanceFromLeft + liftWidth + liftSpacing;
     liftEl.style.bottom = `${bottomOffset}px`;
