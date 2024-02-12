@@ -169,6 +169,9 @@ const renderFloors = function (floors) {
     if (i >= 1) {
       let upButton = document.createElement("button");
       upButton.classList.add("lift-button", "up");
+      if (i == floors) {
+        upButton.classList.add("disable-btn");
+      }
       upButton.id = `${i}-up`;
       upButton.innerHTML = "&#8593;";
 
@@ -185,6 +188,9 @@ const renderFloors = function (floors) {
     if (i <= floors) {
       let downButton = document.createElement("button");
       downButton.classList.add("lift-button", "down");
+      if (i == 1) {
+        downButton.classList.add("disable-btn");
+      }
       downButton.id = `${i}-down`;
       downButton.innerHTML = "&#8595;";
 
@@ -213,7 +219,7 @@ const renderLifts = function (lifts) {
   let simContainerChildrenList = simulationContainerEl.childNodes;
   let simContainerChildrenListLen = simContainerChildrenList.length;
   let firstFloorEl = simContainerChildrenList[simContainerChildrenListLen - 1];
-  let leftOffset = 100;
+  let leftOffset = 50;
   let liftSpacing = 100;
   let distanceFromLeft = 0;
   let bottomOffset = 15;

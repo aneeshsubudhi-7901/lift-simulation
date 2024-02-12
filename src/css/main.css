@@ -140,6 +140,10 @@ html {
   background-color: #ffc436;
 }
 
+.disable-btn {
+  visibility: hidden;
+}
+
 .lift-button-group {
   display: flex;
   flex-direction: column;
