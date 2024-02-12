@@ -1,6 +1,7 @@
 export class Controller {
-  constructor(datastore) {
+  constructor(datastore, queue) {
     this.datastore = datastore;
+    this.queue = queue;
   }
   findBestLift(e) {
     let currentFloor = Number(e.target.id.split("-")[0]);
@@ -20,7 +21,7 @@ export class Controller {
     }
 
     if (chosenLift === 0) {
-      return null;
+      return [null, currentFloor];
     }
     return [{ leastDistance, chosenLift, chosenLiftAtFloor }, currentFloor];
   }
@@ -42,7 +43,6 @@ export class Controller {
         this.datastore.setState(chosenLift, { transition: false, open: true });
         leftDoorEl.classList.add("liftdoor-left");
         rightDoorEl.classList.add("liftdoor-right");
-        console.log(currentFloor);
         chosenLiftEl.style.bottom = `${15 + (currentFloor - 1) * 223.5}px`;
         chosenLiftEl.style.transitionDuration = "";
         chosenLiftEl.style.transitionProperty = "";
@@ -55,12 +55,32 @@ export class Controller {
             });
             leftDoorEl.classList.remove("liftdoor-left");
             rightDoorEl.classList.remove("liftdoor-right");
+
+            //check queue for any pending requests
+            //if any pending rquest in the queue, pick that up and moveLift
+            this.checkQueueAndProcess(chosenLift);
           }.bind(this),
           5000
         );
       }.bind(this),
       leastDistance * 2000
     );
+  }
+
+  checkQueueAndProcess(chosenLift) {
+    //check queue for any pending requests
+    if (!this.queue.empty()) {
+      //pick the first request in the queue and move lift
+      let currentFloor = this.queue.top();
+      this.queue.pop();
+      let chosenLiftAtFloor = this.datastore.getLiftState(chosenLift).floor;
+      let chosenLiftData = {
+        chosenLift,
+        leastDistance: Math.abs(currentFloor - chosenLiftAtFloor),
+        chosenLiftAtFloor,
+      };
+      this.moveLift(chosenLiftData, currentFloor);
+    }
   }
   move(e) {
     let currentFloor = Number(e.target.id.split("-")[0]);
