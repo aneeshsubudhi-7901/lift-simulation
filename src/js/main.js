@@ -26,6 +26,13 @@ simulateBtnEl.addEventListener("click", function () {
   let floorsValue = floorsInputEl.value;
   let liftsValue = liftsInputEl.value;
   console.log(floorsValue, liftsValue);
+  if (Number(floorsValue) < 1) {
+    invalidFloorsEl.classList.remove("hide-invalid-message");
+  }
+
+  if (Number(liftsValue) < 1) {
+    invalidLiftsEl.classList.remove("hide-invalid-message");
+  }
   if (Number(floorsValue) < 1 || Number(liftsValue) < 1) {
     return;
   }
