@@ -189,6 +189,12 @@ const renderFloors = function (floors) {
     downButton.addEventListener("click", controllerAction);
     liftButtonGrpEl.appendChild(downButton);
 
+    //checking if there is only one floor, then remove disable-btn on both up and down button
+    if (floors == 1) {
+      upButton.classList.remove("disable-btn");
+      downButton.classList.remove("disable-btn");
+    }
+
     let floorEl = document.createElement("div");
     floorEl.classList.add("floor");
 
