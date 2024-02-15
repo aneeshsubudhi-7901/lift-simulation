@@ -230,7 +230,7 @@ const renderLifts = function (lifts) {
     liftEl.style.left = `${leftOffset + distanceFromLeft + liftSpacing}px`;
     distanceFromLeft = distanceFromLeft + liftWidth + liftSpacing;
     liftEl.style.bottom = `${bottomOffset}px`;
-    liftEl.style.transform = `translateY(0px)`;
+    liftEl.style.transform = `translateY(0%)`;
     let liftDoorLeft = document.createElement("div");
     liftDoorLeft.classList.add("lift-door", "left");
     let liftDoorRight = document.createElement("div");

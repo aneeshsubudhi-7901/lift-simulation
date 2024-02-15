@@ -31,10 +31,10 @@ export class Controller {
     let chosenLiftEl = document.getElementById(`lift_${chosenLift}`);
     chosenLiftEl.style.transitionDuration = `${leastDistance * 2}s`;
     chosenLiftEl.style.transitionProperty = "transform";
-    let distanceToMove = leastDistance * 223.5;
+    let distanceToMove = leastDistance * 194;
     distanceToMove =
       currentFloor > chosenLiftAtFloor ? -1 * distanceToMove : distanceToMove;
-    chosenLiftEl.style.transform = `translateY(${distanceToMove}px)`;
+    chosenLiftEl.style.transform = `translateY(${distanceToMove}%)`;
     // this.currentFloor = currentFloor;
     setTimeout(
       function () {
