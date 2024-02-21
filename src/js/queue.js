@@ -3,8 +3,8 @@ export class Queue {
     this.queue = [];
     this.size = 0;
   }
-  push(floor) {
-    this.queue.push(floor);
+  push(request) {
+    this.queue.push(request);
     this.size++;
   }
   pop() {
