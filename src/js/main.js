@@ -152,13 +152,19 @@ const queueInit = function () {
 };
 
 const controllerAction = function (e) {
+  if (controller.checkDuplicateRequest(e)) {
+    console.log("DUPLICATE REQUEST");
+    return;
+  }
   let result = controller.findBestLift(e);
-  let [chosenLiftData, currentFloor] = result;
+  let [chosenLiftData, currentFloor, requestedDirection] = result;
+  console.log(requestedDirection);
   if (chosenLiftData) {
-    controller.moveLift(chosenLiftData, currentFloor);
+    controller.moveLift(chosenLiftData, currentFloor, requestedDirection);
   } else {
     console.log("DIDN'T FIND LIFT. TRY AGAIN LATER");
-    queue.push(currentFloor);
+    console.log(requestedDirection);
+    queue.push([currentFloor, requestedDirection]);
   }
 };
 
