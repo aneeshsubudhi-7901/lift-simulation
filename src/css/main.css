@@ -160,12 +160,13 @@ html {
   display: flex;
   position: absolute;
   background-color: silver;
+  gap: 5px;
 }
 
 .lift-door {
   flex-grow: 1;
   background-color: skyblue;
-  border: 1px solid black;
+  /* border: 0.1px solid black; */
 }
 
 .move-lift-up {

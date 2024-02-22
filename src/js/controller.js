@@ -94,6 +94,7 @@ export class Controller {
     let chosenLiftEl = document.getElementById(`lift_${chosenLift}`);
     chosenLiftEl.style.transitionDuration = `${leastDistance * 2}s`;
     chosenLiftEl.style.transitionProperty = "transform";
+    chosenLiftEl.style.transitionTimingFunction = "linear";
     let distanceToMove = leastDistance * 194;
     distanceToMove =
       currentFloor > chosenLiftAtFloor ? -1 * distanceToMove : distanceToMove;
@@ -121,6 +122,7 @@ export class Controller {
         chosenLiftEl.style.transitionDuration = "";
         chosenLiftEl.style.transitionProperty = "";
         chosenLiftEl.style.transform = "";
+        chosenLiftEl.style.transitionTimingFunction = "";
         setTimeout(
           function () {
             this.datastore.setState(chosenLift, {
@@ -184,8 +186,12 @@ export class Controller {
       if (chosenRequest == null) {
         return;
       }
+
       const [currentFloor, requestedDirection] =
         this.queue.queue[chosenRequest];
+      console.log(
+        `currentFloor : ${currentFloor}, requestDirection : ${requestedDirection}`
+      );
       this.queue.queue.splice(chosenRequest, 1);
       let chosenLiftAtFloor = this.datastore.getLiftState(chosenLift).floor;
       let chosenLiftData = {
