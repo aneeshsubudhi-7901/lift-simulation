@@ -26,14 +26,14 @@ simulateBtnEl.addEventListener("click", function () {
   let floorsValue = floorsInputEl.value;
   let liftsValue = liftsInputEl.value;
   console.log(floorsValue, liftsValue);
-  if (Number(floorsValue) < 1) {
+  if (Number(floorsValue) < 2) {
     invalidFloorsEl.classList.remove("hide-invalid-message");
   }
 
   if (Number(liftsValue) < 1) {
     invalidLiftsEl.classList.remove("hide-invalid-message");
   }
-  if (Number(floorsValue) < 1 || Number(liftsValue) < 1) {
+  if (Number(floorsValue) < 2 || Number(liftsValue) < 1) {
     return;
   }
   toggleView();
@@ -42,7 +42,7 @@ simulateBtnEl.addEventListener("click", function () {
 floorsInputEl.addEventListener("input", function (e) {
   const el = e.target;
   console.log(Number(el.value));
-  if (Number(el.value) < 1) {
+  if (Number(el.value) < 2) {
     console.log(invalidFloorsEl.classList);
     invalidFloorsEl.classList.remove("hide-invalid-message");
   } else {
