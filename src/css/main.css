@@ -159,7 +159,7 @@ html {
   border: 1px solid black;
   display: flex;
   position: absolute;
-  background-color: silver;
+  background-color: #607274;
   gap: 5px;
 }
 
