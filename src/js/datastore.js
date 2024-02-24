@@ -8,8 +8,6 @@ export class DataStore {
         floor: 1,
         transition: false,
         open: false,
-        destinationFloor: null,
-        direction: "up",
       });
     }
   }
@@ -25,11 +23,5 @@ export class DataStore {
   }
   getState() {
     return this.state;
-  }
-  getFloorsNum() {
-    return this.floors;
-  }
-  getLiftsNum() {
-    return this.lifts;
   }
 }
