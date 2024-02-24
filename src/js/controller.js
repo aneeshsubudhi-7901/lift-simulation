@@ -3,8 +3,36 @@ export class Controller {
     this.datastore = datastore;
     this.queue = queue;
   }
+
+  checkDuplicateRequest(e) {
+    let currentFloor = Number(e.target.id.split("-")[0]);
+    let requestedDirection = e.target.classList.contains("up") ? "up" : "down";
+    let currentLiftsState = this.datastore.getState();
+    // console.log("checkDuplicateRequest");
+    if (
+      this.queue.queue.find(
+        (val) => val[0] == currentFloor && val[1] == requestedDirection
+      )
+    ) {
+      return true;
+    }
+    for (let [key, liftState] of currentLiftsState) {
+      if (
+        (currentFloor === liftState.destinationFloor &&
+          requestedDirection === liftState.direction) ||
+        (currentFloor === liftState.floor &&
+          requestedDirection === liftState.direction &&
+          (liftState.transition == true || liftState.open == true))
+      ) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   findBestLift(e) {
     let currentFloor = Number(e.target.id.split("-")[0]);
+    let requestedDirection = e.target.classList.contains("up") ? "up" : "down";
     let currentLiftsState = this.datastore.getState();
     let chosenLift = 0;
     let leastDistance = 10000;
@@ -21,13 +49,27 @@ export class Controller {
     }
 
     if (chosenLift === 0) {
-      return [null, currentFloor];
+      // return [null, currentFloor];
+      return [null, currentFloor, requestedDirection];
     }
-    return [{ leastDistance, chosenLift, chosenLiftAtFloor }, currentFloor];
+    // return [{ leastDistance, chosenLift, chosenLiftAtFloor }, currentFloor];
+    return [
+      { leastDistance, chosenLift, chosenLiftAtFloor },
+      currentFloor,
+      requestedDirection,
+    ];
   }
 
-  moveLift({ leastDistance, chosenLift, chosenLiftAtFloor }, currentFloor) {
-    this.datastore.setState(chosenLift, { transition: true });
+  moveLift(
+    { leastDistance, chosenLift, chosenLiftAtFloor },
+    currentFloor,
+    requestedDirection
+  ) {
+    this.datastore.setState(chosenLift, {
+      transition: true,
+      destinationFloor: currentFloor,
+      direction: requestedDirection,
+    });
     let chosenLiftEl = document.getElementById(`lift_${chosenLift}`);
     chosenLiftEl.style.transitionDuration = `${leastDistance * 2}s`;
     chosenLiftEl.style.transitionProperty = "transform";
@@ -41,7 +83,19 @@ export class Controller {
       function () {
         let leftDoorEl = chosenLiftEl.children[0];
         let rightDoorEl = chosenLiftEl.children[1];
-        this.datastore.setState(chosenLift, { transition: false, open: true });
+        // this.datastore.setState(chosenLift, { transition: false, open: true });
+        this.datastore.setState(chosenLift, {
+          transition: false,
+          open: true,
+          destinationFloor: null,
+          floor: currentFloor,
+          direction:
+            this.datastore.getFloorsNum() === currentFloor
+              ? "down"
+              : currentFloor === 1
+              ? "up"
+              : requestedDirection,
+        });
         leftDoorEl.classList.add("liftdoor-left");
         rightDoorEl.classList.add("liftdoor-right");
         chosenLiftEl.style.bottom = `${15 + (currentFloor - 1) * 223.5}px`;
@@ -53,7 +107,6 @@ export class Controller {
           function () {
             this.datastore.setState(chosenLift, {
               open: false,
-              floor: currentFloor,
             });
             leftDoorEl.classList.remove("liftdoor-left");
             rightDoorEl.classList.remove("liftdoor-right");
@@ -73,7 +126,9 @@ export class Controller {
     //check queue for any pending requests
     if (!this.queue.empty()) {
       //pick the first request in the queue and move lift
-      let currentFloor = this.queue.top();
+      // let currentFloor = this.queue.top();
+      let currentFloor = this.queue.top()[0];
+      let requestedDirection = this.queue.top()[1];
       this.queue.pop();
       let chosenLiftAtFloor = this.datastore.getLiftState(chosenLift).floor;
       let chosenLiftData = {
@@ -81,7 +136,8 @@ export class Controller {
         leastDistance: Math.abs(currentFloor - chosenLiftAtFloor),
         chosenLiftAtFloor,
       };
-      this.moveLift(chosenLiftData, currentFloor);
+      // this.moveLift(chosenLiftData, currentFloor);
+      this.moveLift(chosenLiftData, currentFloor, requestedDirection);
     }
   }
   move(e) {
